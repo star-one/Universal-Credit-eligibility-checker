@@ -1,0 +1,131 @@
+<style>
+.shown {
+	display: block;
+}
+.hidden {
+	display: none;
+}
+</style>
+<script>
+theEligibility = "";
+eligibilityFlag = "";
+serviceArea = "";
+// savings = "";
+// pension = "";
+// answered = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+// allAnswered = -1;
+function eligibility(question, answer)
+{
+//	answered[question] = 1;
+//	for(i = 1; i < answered.length; i++)
+//	{
+//		if(!answered[i]) { allAnswered = 0; }
+//	}
+//	if(answered == "1,1,1,1,1,1,1,1,1,1") { allAnswered = 1; }
+	switch(question)
+	{
+		case 1:
+			if(answer == "Single") { eligibilityFlag = "UC"; } else { document.getElementById("q2").className = "shown"; }
+			break;
+		case 2:
+			if(answer > 2) { eligibilityFlag = "HB"; } else { document.getElementById("q3").className = "shown"; }
+			break;
+		case 3:
+			thePostcode = ((answer.replace(/\s+/g, '')).toUpperCase()).substring(0,4); // Remove all the spaces, convert text to upper case, and then guillotine to the first four characters
+			if(thePostcode.length == 4)
+			{
+				switch(thePostcode)
+				{
+					case "B360":
+					case "B368":
+					case "B369":
+					case "B375":
+					case "B376":
+					case "B620":
+						serviceArea = "Full";
+						break;
+					default:
+						serviceArea = "Live";
+				}
+				document.getElementById("q4").className = "shown";
+			}
+			break;
+	}
+	
+//	if(question < 5 && answer == "No") { eligibilityFlag = "no"; }
+//	if(question == 5 && answer == "Yes") { savings = "over"; }
+//	if(question == 6 && answer == "No") { pension = "no"; }
+//	if(savings == "over" && pension == "no") { eligibilityFlag = "no"; }
+
+	switch(eligibilityFlag)
+	{
+		case "UC":
+			theEligibility = "You should apply for Universal Credit.";
+			break;
+		case "HB":
+			theEligibility = "You should apply for Housing Benefit.";
+			break;
+		case "DWP":
+			theEligibility = "You'll need to discuss your circumstances with you Job Centre for further advice.";
+			break;
+	}
+//	if(eligibilityFlag == "UC") { theEligibility = "You should apply for Universal Credit"; }
+//	if(!eligibilityFlag && allAnswered) { theEligibility = "You may be eligible"; }
+	document.getElementById("eligibility").innerHTML = theEligibility;
+}
+</script>
+<div id="precheck">
+<p>Please tell us about your circumstances:</p>
+<ul>
+<li id="q1" class="shown">Are you single or living in a relationship? <select onChange="eligibility(1, this.value)">
+<option value="">--- Please select ---</option>
+<option value="Single">Single</option>
+<option value="Relationship">In a relationship</option>
+</select></li>
+
+<li id="q2" class="hidden">Number of children:<br />
+<input type="radio" name="distance" value="0" id="distance-1" onFocus="eligibility(2, this.value)" /> None<br />
+<input type="radio" name="distance" value="1" id="distance-3" onFocus="eligibility(2, this.value)" /> 1<br />
+<input type="radio" name="distance" value="2" id="distance-5" onFocus="eligibility(2, this.value)" /> 2<br />
+<input type="radio" name="distance" value="3" id="distance-10" onFocus="eligibility(2, this.value)" /> 3 or more<br />
+</li>
+
+<li id="q3" class="hidden">Please enter your postcode: <input type="text" name="yourPostcode" id="yourPostcode" onKeyUp="eligibility(3, this.value)">
+</li>
+
+<li id="q4" class="hidden">Renting your home from a private landlord, the council, or registered social landlord? <select onChange="eligibility(4, this.value)">
+<option value="">--- Please select ---</option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></li>
+
+
+
+
+<li id="q5" class="hidden">Having savings of more than £16,000? <select onChange="eligibility(5, this.value)">
+<option value="">--- Please select ---</option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></li>
+<li id="q6" class="hidden">Above the age for getting state pension credit? <select onChange="eligibility(6, this.value)">
+<option value="">--- Please select ---</option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></li>
+<li id="q7" class="hidden">Living in a mobile home or houseboat? <select onChange="eligibility(7, this.value)">
+<option value="">--- Please select ---</option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></li>
+<li id="q8" class="hidden">Renting under a shared ownership scheme? <select onChange="eligibility(8, this.value)">
+<option value="">--- Please select ---</option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></li>
+<li id="q9" class="hidden">A boarder whose rent includes meals? <select onChange="eligibility(9, this.value)">
+<option value="">--- Please select ---</option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></li>
+</ul>
+<div id="eligibility"></div>
