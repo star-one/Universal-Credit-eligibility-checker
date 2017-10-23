@@ -18,6 +18,6 @@ Latest source always available at
 https://github.com/star-one/Universal-Credit-eligibility-checker         
                                                                           
 Feel free to use and change as you see fit, but please credit myself     
-and Birmingham City Council and provide the GitHub link above as a       
+and Birmingham City Council and provide the GitHub link above       
 if you do in a comment like this. It's the polite thing to do. And it's  
 always nice to be told if other people are using it.                     
