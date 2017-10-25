@@ -1,0 +1,273 @@
+<!-- 
+############################################################################
+# A decision-tree form to enable a user to determine whether they should   #
+# apply for Universal Credit or Housing Benefit.                           #
+#                                                                          #
+# Based on information on https://www.gov.uk/universal-credit/eligibility  #
+# as at 20 October 2017. That information could be clearer than it is.     #
+#                                                                          #
+# Made by simon.gray@birmingham.gov.uk of Birmingham City Council,         #
+# released under GPL-3.0                                                   #
+#                                                                          #
+# I've prioritised readability over optimisation; there may be a better    #
+# way to either make it more readable and/or more optimal. It's of course  #
+# a bare HTML/JavaScript rendition, you will style accordingly for your    #
+# own site's look and feel.                                                #
+#                                                                          #
+# Latest source always available at                                        #
+# https://github.com/star-one/Universal-Credit-eligibility-checker         #
+#                                                                          #
+# Feel free to use and change as you see fit, but if you do please credit  #
+# myself and Birmingham City Council and provide the GitHub link above     #
+# in a comment like this. It's the polite thing to do. And it's always     #
+# nice to be told if other people are using it.                            #
+############################################################################
+-->
+<style>
+.shown {
+	display: block;
+}
+.hidden {
+	display: none;
+}
+</style>
+<script>
+serviceArea = "";
+savings = "";
+lastAnswered = 0;
+function eligibility(question, answer)
+{
+	eligibilityFlag = "";
+	if(question >= lastAnswered) { lastAnswered = question; } else { location.reload(); } // Reset the form if the user changes a previous answer; quick and dirty page reload because people shouldn't need to be changing answers
+	switch(question)
+	{
+		case 0: // 16-18
+			if(answer == "Yes") { eligibilityFlag = "DWP"; } else { document.getElementById("q1").className = "form__control shown"; }
+			break;
+		case 1: // Single / relationship
+			if(answer == "Single") { eligibilityFlag = "UC"; } else { document.getElementById("q2").className = "form__control shown"; }
+			break;
+		case 2: // Number of children
+			if(answer > 2) { eligibilityFlag = "HB"; } else { document.getElementById("q3").className = "form__control shown"; }
+			break;
+		case 3: // Postcode
+			thePostcode = ((answer.replace(/\s+/g, '')).toUpperCase()).substring(0,4); // Remove all the spaces, convert text to upper case, and then guillotine to the first four characters
+			if(answer.replace(/\s+/g, '').length == 6) // Lets the user type their full postcode even though it only pattern-matches the beginning, in order to not give a jarring experience!
+			{
+				switch(thePostcode)
+				{
+					case "B360":
+					case "B368":
+					case "B369":
+					case "B375":
+					case "B376":
+					case "B620":
+						serviceArea = "Full";
+						savings = "&pound;16,000";
+						break;
+					default:
+						serviceArea = "Live";
+						savings = "&pound;6,000";
+				}
+				document.getElementById("savings").innerHTML = savings;
+				document.getElementById("q4").className = "form__control shown";
+			}
+			break;
+		case 4: // Age
+			if(answer == "No") { eligibilityFlag = "HB"; } else { document.getElementById("q5").className = "form__control shown"; }
+			break;
+		case 5: // Savings
+			if(answer == "Yes") { eligibilityFlag = "HB"; } else { if(serviceArea == "Full") { document.getElementById("q6").className = "form__control shown"; } else { document.getElementById("q7").className = "form__control shown"; } }
+			break;
+		case 6: // Low income or unemployed
+			if(answer == "No") { eligibilityFlag = "HB"; } else { document.getElementById("q8").className = "form__control shown"; }
+			break;
+		case 7: // Self-employed
+			if(answer == "Yes") { eligibilityFlag = "DWP"; } else { document.getElementById("q8").className = "form__control shown"; }
+			break;
+		case 8: // Apprentice
+			if(answer == "Yes") { eligibilityFlag = "DWP"; } else { document.getElementById("q9").className = "form__control shown"; }
+			break;
+		case 9: // Education / training
+			if(serviceArea == "Full")
+			{
+				if(answer == "No")
+				{
+					eligibilityFlag = "UC";
+				}
+				else
+				{
+					eligibilityFlag = "DWP";
+				}
+			}
+			else
+			{
+				if(answer == "Yes")
+				{
+					eligibilityFlag = "DWP";
+				}
+				else
+				{
+					document.getElementById("q10").className = "form__control shown"; }
+				}
+			break;
+		case 10: // Earnings
+			if(answer == "Yes") { eligibilityFlag = "DWP"; } else { document.getElementById("q11").className = "form__control shown"; }
+			break;
+		case 11: // Capability to look for work
+			if(answer == "No") { eligibilityFlag = "HB"; } else { document.getElementById("q12").className = "form__control shown"; }
+			break;
+		case 12: // British Citizen
+			if(answer == "No") { eligibilityFlag = "HB"; } else { document.getElementById("q13").className = "form__control shown"; }
+			break;
+		case 13: // Homeowner
+			if(answer == "Yes") { eligibilityFlag = "DWP"; } else { document.getElementById("q14").className = "form__control shown"; }
+			break;
+		case 14: // Homeless
+			if(answer == "Yes") { eligibilityFlag = "HB"; } else { document.getElementById("q15").className = "form__control shown"; }
+			break;
+		case 15: // Carer
+			if(answer == "Yes") { eligibilityFlag = "HB"; } else { document.getElementById("q16").className = "form__control shown"; }
+			break;
+		case 16: // Pregnant or recent baby
+			if(answer == "Yes") { eligibilityFlag = "HB"; } else { document.getElementById("q17").className = "form__control shown"; }
+			break;
+		case 17: // Child maintenance
+			if(answer == "Yes") { eligibilityFlag = "HB"; } else { eligibilityFlag = "UC"; }
+			break;
+	}
+	
+	switch(eligibilityFlag)
+	{
+		case "UC":
+			theEligibility = "<strong>You should apply for <a href=\"https://www.birmingham.gov.uk/universalcredit\" title=\"Universal Credit\">Universal Credit</a> and <a href=\"https://www.birmingham.gov.uk/council-tax-support\" title=\"Council Tax Support\">Council Tax Support</a>.</strong>";
+			break;
+		case "HB":
+			theEligibility = "<strong>You should apply for <a href=\"https://www.birmingham.gov.uk/housingbenefit\" title=\"Housing Benefit\">Housing Benefit</a> and <a href=\"https://www.birmingham.gov.uk/council-tax-support\" title=\"Council Tax Support\">Council Tax Support</a>.</strong>";
+			break;
+		case "DWP":
+			theEligibility = "<strong>You'll need to discuss your circumstances with your <a href=\"https://los.direct.gov.uk/\" title=\"Find your local Jobcentre Plus\">Jobcentre Plus</a> for further advice.</strong>";
+			break;
+		default:
+			theEligibility = "";
+	}
+	document.getElementById("eligibility").innerHTML = theEligibility;
+}
+</script>
+<div id="precheck" class="boxed">
+<form class="form form--block">
+<h2 class="form__heading">Please tell us about your circumstances:</h2>
+
+<div id="q0" class="form__control shown"><label for="q0" class="form__label">Are you aged 16-18?</label> <div class="form__control-group"><select name="q0" class="form__field" onChange="eligibility(0, this.value)">
+<option value=""> Please select </option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></div></div>
+
+<div id="q1" class="form__control hidden"><label for="q1" class="form__label">Are you single or living in a relationship?</label> <div class="form__control-group"> <select name="q1" onChange="eligibility(1, this.value)">
+<option value=""> Please select </option>
+<option value="Single">Single</option>
+<option value="Relationship">In a relationship</option>
+</select></div></div>
+
+<div id="q2" class="hidden"><label for="q2" class="form__label">Number of children:</label> <div class="form__control-group">
+<input type="radio" name="q2" value="0" id="distance-1" onFocus="eligibility(2, this.value)" /> None<br />
+<input type="radio" name="q2" value="1" id="distance-3" onFocus="eligibility(2, this.value)" /> 1<br />
+<input type="radio" name="q2" value="2" id="distance-5" onFocus="eligibility(2, this.value)" /> 2<br />
+<input type="radio" name="q2" value="3" id="distance-10" onFocus="eligibility(2, this.value)" /> 3 or more<br />
+</div></div>
+
+<div id="q3" class="hidden"><label for="q3" class="form__label">Please enter your postcode:</label> <div class="form__control-group"> <input name="q3" type="text" name="yourPostcode" id="yourPostcode" onKeyUp="eligibility(3, this.value)">
+</div></div>
+
+<div id="q4" class="hidden"><label for="q4" class="form__label">Are you aged between 18 and the State Pension Age (<a href="https://www.gov.uk/state-pension-age/y/age" title="Check your State Pension Age" target="checkSPA">Check</a>)</label> <div class="form__control-group"> <select name="q4" onChange="eligibility(4, this.value)">
+<option value=""> Please select </option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></div></div>
+
+<div id="q5" class="hidden"><label for="q5" class="form__label">Do you have savings of <strong>more than</strong> <span id="savings"></span>?</label> <div class="form__control-group"> <select name="q5" onChange="eligibility(5, this.value)">
+<option value=""> Please select </option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></div></div>
+
+<div id="q6" class="hidden"><label for="q6" class="form__label">Are you on a low income or unemployed?</label> <div class="form__control-group"> <select name="q6" onChange="eligibility(6, this.value)">
+<option value=""> Please select </option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></div></div>
+
+<div id="q7" class="hidden"><label for="q7" class="form__label">Are you self-employed?</label> <div class="form__control-group"> <select name="q7" onChange="eligibility(7, this.value)">
+<option value=""> Please select </option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></div></div>
+
+<div id="q8" class="hidden"><label for="q8" class="form__label">Are you doing an apprenticeship?</label> <div class="form__control-group"> <select name="q8" onChange="eligibility(8, this.value)">
+<option value=""> Please select </option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></div></div>
+
+<div id="q9" class="hidden"><label for="q9" class="form__label">Are you in full time education or training?</label> <div class="form__control-group"> <select name="q9" onChange="eligibility(9, this.value)">
+<option value=""> Please select </option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></div></div>
+
+<div id="q10" class="hidden"><label for="q10" class="form__label">Do you expect to earn more than £338 in the next month?</label> <div class="form__control-group"> <select name="q10" onChange="eligibility(10, this.value)">
+<option value=""> Please select </option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></div></div>
+
+<div id="q11" class="hidden"><label for="q11" class="form__label">Are you able to work or look for work?</label> <div class="form__control-group"> <select name="q11" onChange="eligibility(11, this.value)">
+<option value=""> Please select </option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></div></div>
+
+<div id="q12" class="hidden"><label for="q12" class="form__label">Are you a British Citizen?</label> <div class="form__control-group"> <select name="q12" onChange="eligibility(12, this.value)">
+<option value=""> Please select </option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></div></div>
+
+<div id="q13" class="hidden"><label for="q13" class="form__label">Are you a homeowner?</label> <div class="form__control-group"> <select name="q13" onChange="eligibility(13, this.value)">
+<option value=""> Please select </option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></div></div>
+
+<div id="q14" class="hidden"><label for="q14" class="form__label">Are you homeless?</label> <div class="form__control-group"> <select name="q14" onChange="eligibility(14, this.value)">
+<option value=""> Please select </option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></div></div>
+
+<div id="q15" class="hidden"><label for="q15" class="form__label">Are you a carer or foster carer?</label> <div class="form__control-group"> <select name="q15" onChange="eligibility(15, this.value)">
+<option value=""> Please select </option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></div></div>
+
+<div id="q16" class="hidden"><label for="q16" class="form__label">Are you pregnant or had a baby within the last 15 weeks?</label> <div class="form__control-group"> <select name="q16" onChange="eligibility(16, this.value)">
+<option value=""> Please select </option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></div></div>
+
+<div id="q17" class="hidden"><label for="q17" class="form__label">Are you liable to pay child maintenance?</label> <div class="form__control-group"> <select name="q17" onChange="eligibility(17, this.value)">
+<option value=""> Please select </option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></div></div>
+</form>
+
+<div id="eligibility"></div>
+</div>
+
+<div id="disclaimer">
+<p><em>This guidance is taken from information on <a href="https://www.gov.uk/universal-credit/eligibility" title="Universal Credit on www.gov.uk">https://www.gov.uk/universal-credit/eligibility</a> as at 20 October 2017. If in doubt, please refer to your local <a href="https://los.direct.gov.uk/" title="Find your local Jobcentre Plus">Jobcentre Plus</a>.</em></p>
+</div>
