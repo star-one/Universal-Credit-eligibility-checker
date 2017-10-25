@@ -36,11 +36,15 @@ eligibilityFlag = "";
 serviceArea = "";
 age1618 = "";
 savings = "";
+lastAnswered = 0;
 function eligibility(question, answer)
 {
-	theEligibility = "";
+	if(question >= lastAnswered) { lastAnswered = question; } else { location.reload(); } // Reset the form if the user changes a previous answer; quick and dirty page reload because people shouldn't need to be changing answers
 	switch(question)
 	{
+		case 0: // 16-18
+			if(answer == "Yes") { eligibilityFlag = "DWP"; } else { document.getElementById("q1").className = "shown"; }
+			break;
 		case 1: // Single / relationship
 			if(answer == "Single") { eligibilityFlag = "UC"; } else { document.getElementById("q2").className = "shown"; }
 			break;
@@ -49,7 +53,7 @@ function eligibility(question, answer)
 			break;
 		case 3: // Postcode
 			thePostcode = ((answer.replace(/\s+/g, '')).toUpperCase()).substring(0,4); // Remove all the spaces, convert text to upper case, and then guillotine to the first four characters
-			if(thePostcode.length == 4)
+			if(answer.replace(/\s+/g, '').length == 6) // Lets the user type their full postcode even though it only pattern-matches the beginning, in order to not give a jarring experience!
 			{
 				switch(thePostcode)
 				{
@@ -71,7 +75,7 @@ function eligibility(question, answer)
 			}
 			break;
 		case 4: // Age
-			if(answer == "No") { eligibilityFlag = "HB"; age1618 = "Maybe"; } else { document.getElementById("q5").className = "shown"; }
+			if(answer == "No") { eligibilityFlag = "HB"; } else { document.getElementById("q5").className = "shown"; }
 			break;
 		case 5: // Savings
 			if(answer == "Yes") { eligibilityFlag = "HB"; } else { if(serviceArea == "Full") { document.getElementById("q6").className = "shown"; } else { document.getElementById("q7").className = "shown"; } }
@@ -80,12 +84,12 @@ function eligibility(question, answer)
 			if(answer == "No") { eligibilityFlag = "HB"; } else { document.getElementById("q8").className = "shown"; }
 			break;
 		case 7: // Self-employed
-			if(answer == "Yes") { eligibilityFlag = "DWP"; } else { document.getElementById("q801").className = "shown"; }
-			break;
-		case 801: // Apprentice
 			if(answer == "Yes") { eligibilityFlag = "DWP"; } else { document.getElementById("q8").className = "shown"; }
 			break;
-		case 8: // Education / training
+		case 8: // Apprentice
+			if(answer == "Yes") { eligibilityFlag = "DWP"; } else { document.getElementById("q9").className = "shown"; }
+			break;
+		case 9: // Education / training
 			if(serviceArea == "Full")
 			{
 				if(answer == "No")
@@ -105,31 +109,31 @@ function eligibility(question, answer)
 				}
 				else
 				{
-					document.getElementById("q9").className = "shown"; }
+					document.getElementById("q10").className = "shown"; }
 				}
 			break;
-		case 9: // Earnings
-			if(answer == "Yes") { eligibilityFlag = "DWP"; } else { document.getElementById("q10").className = "shown"; }
+		case 10: // Earnings
+			if(answer == "Yes") { eligibilityFlag = "DWP"; } else { document.getElementById("q11").className = "shown"; }
 			break;
-		case 10: // Capability to look for work
-			if(answer == "No") { eligibilityFlag = "HB"; } else { document.getElementById("q11").className = "shown"; }
-			break;
-		case 11: // British Citizen
+		case 11: // Capability to look for work
 			if(answer == "No") { eligibilityFlag = "HB"; } else { document.getElementById("q12").className = "shown"; }
 			break;
-		case 12: // Homeowner
-			if(answer == "Yes") { eligibilityFlag = "DWP"; } else { document.getElementById("q13").className = "shown"; }
+		case 12: // British Citizen
+			if(answer == "No") { eligibilityFlag = "HB"; } else { document.getElementById("q13").className = "shown"; }
 			break;
-		case 13: // Homeless
-			if(answer == "Yes") { eligibilityFlag = "HB"; } else { document.getElementById("q14").className = "shown"; }
+		case 13: // Homeowner
+			if(answer == "Yes") { eligibilityFlag = "DWP"; } else { document.getElementById("q14").className = "shown"; }
 			break;
-		case 14: // Carer
+		case 14: // Homeless
 			if(answer == "Yes") { eligibilityFlag = "HB"; } else { document.getElementById("q15").className = "shown"; }
 			break;
-		case 15: // Pregnant or recent baby
+		case 15: // Carer
 			if(answer == "Yes") { eligibilityFlag = "HB"; } else { document.getElementById("q16").className = "shown"; }
 			break;
-		case 16: // Child maintenance
+		case 16: // Pregnant or recent baby
+			if(answer == "Yes") { eligibilityFlag = "HB"; } else { document.getElementById("q17").className = "shown"; }
+			break;
+		case 17: // Child maintenance
 			if(answer == "Yes") { eligibilityFlag = "HB"; } else { eligibilityFlag = "UC"; }
 			break;
 	}
@@ -140,22 +144,27 @@ function eligibility(question, answer)
 			theEligibility = "You should apply for Universal Credit and Council Tax Support.";
 			break;
 		case "HB":
-			theEligibility = "You should apply for Housing Benefit and Council Tax Support";
-			if(age1618) { theEligibility += ", however if you are aged 16-18 you should discuss your circumstances with your Job Centre for further advice"; }
-			theEligibility += ".";
+			theEligibility = "You should apply for Housing Benefit and Council Tax Support.";
 			break;
 		case "DWP":
 			theEligibility = "You'll need to discuss your circumstances with your Job Centre for further advice.";
 			break;
+		default:
+			theEligibility = "";
 	}
-
 	document.getElementById("eligibility").innerHTML = theEligibility;
 }
 </script>
 <div id="precheck">
 <p>Please tell us about your circumstances:</p>
 <ul>
-<li id="q1" class="shown">Are you single or living in a relationship? <select onChange="eligibility(1, this.value)">
+<li id="q0" class="shown">Are you aged 16-18? <select onChange="eligibility(0, this.value)">
+<option value="">--- Please select ---</option>
+<option value="Yes">Yes</option>
+<option value="No">No</option>
+</select></li>
+
+<li id="q1" class="hidden">Are you single or living in a relationship? <select onChange="eligibility(1, this.value)">
 <option value="">--- Please select ---</option>
 <option value="Single">Single</option>
 <option value="Relationship">In a relationship</option>
@@ -195,61 +204,61 @@ function eligibility(question, answer)
 <option value="No">No</option>
 </select></li>
 
-<li id="q801" class="hidden">Are you doing an apprenticeship? <select onChange="eligibility(801, this.value)">
+<li id="q8" class="hidden">Are you doing an apprenticeship? <select onChange="eligibility(8, this.value)">
 <option value="">--- Please select ---</option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></li>
 
-<li id="q8" class="hidden">Are you in full time education or training? <select onChange="eligibility(8, this.value)">
+<li id="q9" class="hidden">Are you in full time education or training? <select onChange="eligibility(9, this.value)">
 <option value="">--- Please select ---</option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></li>
 
-<li id="q9" class="hidden">Do you expect to earn more than £338 in the next month? <select onChange="eligibility(9, this.value)">
+<li id="q10" class="hidden">Do you expect to earn more than £338 in the next month? <select onChange="eligibility(10, this.value)">
 <option value="">--- Please select ---</option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></li>
 
-<li id="q10" class="hidden">Are you able to work or look for work? <select onChange="eligibility(10, this.value)">
+<li id="q11" class="hidden">Are you able to work or look for work? <select onChange="eligibility(11, this.value)">
 <option value="">--- Please select ---</option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></li>
 
-<li id="q11" class="hidden">Are you a British Citizen? <select onChange="eligibility(11, this.value)">
+<li id="q12" class="hidden">Are you a British Citizen? <select onChange="eligibility(12, this.value)">
 <option value="">--- Please select ---</option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></li>
 
-<li id="q12" class="hidden">Are you a homeowner? <select onChange="eligibility(12, this.value)">
+<li id="q13" class="hidden">Are you a homeowner? <select onChange="eligibility(13, this.value)">
 <option value="">--- Please select ---</option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></li>
 
-<li id="q13" class="hidden">Are you homeless? <select onChange="eligibility(13, this.value)">
+<li id="q14" class="hidden">Are you homeless? <select onChange="eligibility(14, this.value)">
 <option value="">--- Please select ---</option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></li>
 
-<li id="q14" class="hidden">Are you a carer or foster carer? <select onChange="eligibility(14, this.value)">
+<li id="q15" class="hidden">Are you a carer or foster carer? <select onChange="eligibility(15, this.value)">
 <option value="">--- Please select ---</option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></li>
 
-<li id="q15" class="hidden">Are you pregnant or had a baby within the last 15 weeks? <select onChange="eligibility(15, this.value)">
+<li id="q16" class="hidden">Are you pregnant or had a baby within the last 15 weeks? <select onChange="eligibility(16, this.value)">
 <option value="">--- Please select ---</option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></li>
 
-<li id="q16" class="hidden">Are you liable to pay child maintenance? <select onChange="eligibility(16, this.value)">
+<li id="q17" class="hidden">Are you liable to pay child maintenance? <select onChange="eligibility(17, this.value)">
 <option value="">--- Please select ---</option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
