@@ -164,7 +164,7 @@ function eligibility(question, answer)
 <option value="No">No</option>
 </select></div></div>
 
-<div id="q1" class="form__control hidden"><label for="q1" class="form__label">Are you single or living in a relationship?</label> <div class="form__control-group"> <select name="q1" onChange="eligibility(1, this.value)">
+<div id="q1" class="form__control hidden"><label for="q1" class="form__label">Are you single or living in a relationship?</label> <div class="form__control-group"> <select name="q1" class="form__field" onChange="eligibility(1, this.value)">
 <option value=""> Please select </option>
 <option value="Single">Single</option>
 <option value="Relationship">In a relationship</option>
@@ -177,88 +177,88 @@ function eligibility(question, answer)
 <input type="radio" name="q2" value="3" id="distance-10" onFocus="eligibility(2, this.value)" /> 3 or more<br />
 </div></div>
 
-<div id="q3" class="hidden"><label for="q3" class="form__label">Please enter your postcode:</label> <div class="form__control-group"> <input name="q3" type="text" name="yourPostcode" id="yourPostcode" onKeyUp="eligibility(3, this.value)">
+<div id="q3" class="hidden"><label for="q3" class="form__label">Please enter your postcode:</label> <div class="form__control-group"> <input class="form__field" name="q3" type="text" name="yourPostcode" id="yourPostcode" onKeyUp="eligibility(3, this.value)">
 </div></div>
 
-<div id="q4" class="hidden"><label for="q4" class="form__label">Are you aged between 18 and the State Pension Age (<a href="https://www.gov.uk/state-pension-age/y/age" title="Check your State Pension Age" target="checkSPA">Check</a>)</label> <div class="form__control-group"> <select name="q4" onChange="eligibility(4, this.value)">
+<div id="q4" class="hidden"><label for="q4" class="form__label">Are you aged between 18 and the State Pension Age (<a href="https://www.gov.uk/state-pension-age/y/age" title="Check your State Pension Age" target="checkSPA">Check</a>)</label> <div class="form__control-group"> <select name="q4" class="form__field" onChange="eligibility(4, this.value)">
 <option value=""> Please select </option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></div></div>
 
-<div id="q5" class="hidden"><label for="q5" class="form__label">Do you have savings of <strong>more than</strong> <span id="savings"></span>?</label> <div class="form__control-group"> <select name="q5" onChange="eligibility(5, this.value)">
+<div id="q5" class="hidden"><label for="q5" class="form__label">Do you have savings of <strong>more than</strong> <span id="savings"></span>?</label> <div class="form__control-group"> <select name="q5" class="form__field" onChange="eligibility(5, this.value)">
 <option value=""> Please select </option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></div></div>
 
-<div id="q6" class="hidden"><label for="q6" class="form__label">Are you on a low income or unemployed?</label> <div class="form__control-group"> <select name="q6" onChange="eligibility(6, this.value)">
+<div id="q6" class="hidden"><label for="q6" class="form__label">Are you on a low income or unemployed?</label> <div class="form__control-group"> <select name="q6" class="form__field" onChange="eligibility(6, this.value)">
 <option value=""> Please select </option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></div></div>
 
-<div id="q7" class="hidden"><label for="q7" class="form__label">Are you self-employed?</label> <div class="form__control-group"> <select name="q7" onChange="eligibility(7, this.value)">
+<div id="q7" class="hidden"><label for="q7" class="form__label">Are you self-employed?</label> <div class="form__control-group"> <select name="q7" class="form__field" onChange="eligibility(7, this.value)">
 <option value=""> Please select </option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></div></div>
 
-<div id="q8" class="hidden"><label for="q8" class="form__label">Are you doing an apprenticeship?</label> <div class="form__control-group"> <select name="q8" onChange="eligibility(8, this.value)">
+<div id="q8" class="hidden"><label for="q8" class="form__label">Are you doing an apprenticeship?</label> <div class="form__control-group"> <select name="q8" class="form__field" onChange="eligibility(8, this.value)">
 <option value=""> Please select </option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></div></div>
 
-<div id="q9" class="hidden"><label for="q9" class="form__label">Are you in full time education or training?</label> <div class="form__control-group"> <select name="q9" onChange="eligibility(9, this.value)">
+<div id="q9" class="hidden"><label for="q9" class="form__label">Are you in full time education or training?</label> <div class="form__control-group"> <select name="q9" class="form__field" onChange="eligibility(9, this.value)">
 <option value=""> Please select </option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></div></div>
 
-<div id="q10" class="hidden"><label for="q10" class="form__label">Do you expect to earn more than £338 in the next month?</label> <div class="form__control-group"> <select name="q10" onChange="eligibility(10, this.value)">
+<div id="q10" class="hidden"><label for="q10" class="form__label">Do you expect to earn more than £338 in the next month?</label> <div class="form__control-group"> <select name="q10" class="form__field" onChange="eligibility(10, this.value)">
 <option value=""> Please select </option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></div></div>
 
-<div id="q11" class="hidden"><label for="q11" class="form__label">Are you able to work or look for work?</label> <div class="form__control-group"> <select name="q11" onChange="eligibility(11, this.value)">
+<div id="q11" class="hidden"><label for="q11" class="form__label">Are you able to work or look for work?</label> <div class="form__control-group"> <select name="q11" class="form__field" onChange="eligibility(11, this.value)">
 <option value=""> Please select </option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></div></div>
 
-<div id="q12" class="hidden"><label for="q12" class="form__label">Are you a British Citizen?</label> <div class="form__control-group"> <select name="q12" onChange="eligibility(12, this.value)">
+<div id="q12" class="hidden"><label for="q12" class="form__label">Are you a British Citizen?</label> <div class="form__control-group"> <select name="q12" class="form__field" onChange="eligibility(12, this.value)">
 <option value=""> Please select </option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></div></div>
 
-<div id="q13" class="hidden"><label for="q13" class="form__label">Are you a homeowner?</label> <div class="form__control-group"> <select name="q13" onChange="eligibility(13, this.value)">
+<div id="q13" class="hidden"><label for="q13" class="form__label">Are you a homeowner?</label> <div class="form__control-group"> <select name="q13" class="form__field" onChange="eligibility(13, this.value)">
 <option value=""> Please select </option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></div></div>
 
-<div id="q14" class="hidden"><label for="q14" class="form__label">Are you homeless?</label> <div class="form__control-group"> <select name="q14" onChange="eligibility(14, this.value)">
+<div id="q14" class="hidden"><label for="q14" class="form__label">Are you homeless?</label> <div class="form__control-group"> <select name="q14" class="form__field" onChange="eligibility(14, this.value)">
 <option value=""> Please select </option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></div></div>
 
-<div id="q15" class="hidden"><label for="q15" class="form__label">Are you a carer or foster carer?</label> <div class="form__control-group"> <select name="q15" onChange="eligibility(15, this.value)">
+<div id="q15" class="hidden"><label for="q15" class="form__label">Are you a carer or foster carer?</label> <div class="form__control-group"> <select name="q15" class="form__field" onChange="eligibility(15, this.value)">
 <option value=""> Please select </option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></div></div>
 
-<div id="q16" class="hidden"><label for="q16" class="form__label">Are you pregnant or had a baby within the last 15 weeks?</label> <div class="form__control-group"> <select name="q16" onChange="eligibility(16, this.value)">
+<div id="q16" class="hidden"><label for="q16" class="form__label">Are you pregnant or had a baby within the last 15 weeks?</label> <div class="form__control-group"> <select name="q16" class="form__field" onChange="eligibility(16, this.value)">
 <option value=""> Please select </option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
 </select></div></div>
 
-<div id="q17" class="hidden"><label for="q17" class="form__label">Are you liable to pay child maintenance?</label> <div class="form__control-group"> <select name="q17" onChange="eligibility(17, this.value)">
+<div id="q17" class="hidden"><label for="q17" class="form__label">Are you liable to pay child maintenance?</label> <div class="form__control-group"> <select name="q17" class="form__field" onChange="eligibility(17, this.value)">
 <option value=""> Please select </option>
 <option value="Yes">Yes</option>
 <option value="No">No</option>
